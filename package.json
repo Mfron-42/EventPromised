@@ -1,8 +1,9 @@
 {
   "name": "event-promised",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Combine promises and events",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "events": "^3.0.0"
   },
