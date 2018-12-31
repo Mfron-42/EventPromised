@@ -15,15 +15,15 @@ Example :
 	    resolve("Promise solved");
     })
     .on("A", (res) => {
-	    console.log(res);
+	    console.log(res); //Print for event A
     })
     .once("B", (res) => {
-	    console.log(res);
+	    console.log(res); //Print for event B
     })
     .then((res) => {
-	    console.log(res);
+	    console.log(res); //Promise solved
     })
     .then(() => new EventPromised((resolve) =>  resolve("Result from new EventPromised promise")))
     .then((res) => {
-	    console.log(res);
+	    console.log(res); //Result from new EventPromised promise
     })
