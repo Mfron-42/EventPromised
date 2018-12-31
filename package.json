@@ -1,0 +1,37 @@
+{
+  "name": "event-promised",
+  "version": "1.0.0",
+  "description": "Combine promises and events",
+  "main": "src/index.ts",
+  "dependencies": {
+    "events": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/events": "^1.2.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "typescript": "^3.2.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha tests/*.js --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mfron-42/EventPromised.git"
+  },
+  "keywords": [
+    "event",
+    "promise",
+    "on",
+    "once",
+    "then",
+    "catch"
+  ],
+  "author": "Matthieu Fron <mfron.42@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mfron-42/EventPromised/issues"
+  },
+  "homepage": "https://github.com/Mfron-42/EventPromised#readme"
+}
