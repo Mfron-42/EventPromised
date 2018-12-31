@@ -5,10 +5,9 @@ Combine event and promise
 
 Example :
 
-
-    import  EventPromised  from  "event-promised";
+    import EventPromised from "event-promised";
     
-    new  EventPromised((resolve, error, emit ) => {
+    new EventPromised((resolve, error, emit ) => {
 	    emit("A","Print for event A");
 	    emit("B", "Print for event B");
 	    emit("B", "Not printed because subscibed from once");
