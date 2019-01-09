@@ -44,54 +44,29 @@ export class ReplayEventEmitter extends EventEmitter {
     }
 }
 
-export default class EventPromised<T> {
-
-    private eventEmitter: ReplayEventEmitter;
-    private promise: Promise<T>;
+export default class EventPromised<T> extends Promise<T> {
 
     constructor(
-        execution: (resolve: (result: T) => void, reject: (error: Error) => void,
-        emit: (event: string, value?: any) => void)  => void,
-        emitter: ReplayEventEmitter = new ReplayEventEmitter()
-        ) {
-        this.eventEmitter = emitter;
-        this.promise = new Promise<T>((resolve, reject) => execution(resolve, reject, emitter.emit.bind(emitter)));
-    }
-
-    private static FromPromise<TRes>(promise: Promise<TRes>): EventPromised<TRes> {
-        return new EventPromised<TRes>(() => ({})).setPromise(promise);
-    }
-
-    private setPromise(promise: Promise<T>): this {
-        this.promise = promise;
-        return this;
-    }
-
-    public then<TResult1 = T, TResult2 = never>(
-        onfulfilled: ((value: T) => TResult1 | PromiseLike<TResult1>)
-        ): EventPromised<TResult1 | TResult2> {
-        return EventPromised.FromPromise(this.promise.then((result) => {
-            this.eventEmitter.removeAllListeners();
-            return onfulfilled(result);
-        }));
-    }
-
-    public catch<TResult = never>(
-        onrejected: ((reason: any) => TResult | PromiseLike<TResult>)
-        ): EventPromised<T | TResult> {
-        return EventPromised.FromPromise(this.promise.catch((error) => {
-            this.eventEmitter.removeAllListeners();
-            return onrejected(error);
-        }));
+        executor: (resolve:  (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void, emit?: (event: string, value?: any) => void) => void,
+        private emitter: ReplayEventEmitter = new ReplayEventEmitter()
+        )
+        {
+            super((resolve, reject) => executor((result) => {
+                emitter.removeAllListeners()
+                resolve(result);
+            }, (error) => {
+                emitter.removeAllListeners()
+                reject(error);
+            }, emitter.emit.bind(emitter)));
     }
 
     public on<TData>(eventName: string, onData: (data: TData) => void): this {
-        this.eventEmitter.on(eventName, onData);
+        this.emitter.on(eventName, onData);
         return this;
     }
 
     public once<TData>(eventName: string, onData: (data: TData) => void): this {
-        this.eventEmitter.once(eventName, onData);
+        this.emitter.once(eventName, onData);
         return this;
     }
 }
