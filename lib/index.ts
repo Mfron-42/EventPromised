@@ -47,7 +47,7 @@ export class ReplayEventEmitter extends EventEmitter {
 export default class EventPromised<T> extends Promise<T> {
 
     constructor(
-        executor: (resolve:  (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void, emit?: (event: string, value?: any) => void) => void,
+        executor: (resolve:  (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void, emit: (event: string, value?: any) => void) => void,
         private emitter: ReplayEventEmitter = new ReplayEventEmitter()
         )
         {
