@@ -54,21 +54,37 @@ export class ReplayEventEmitter {
     }
 }
 
+interface Actions {
+    cancelToken: (error?: any) => void;
+};
 
 export default class EventPromised<T> extends Promise<T> {
+    private actions: Actions;
 
+    // @ts-ignore
     constructor(
         executor: (resolve:  (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void, emit: (event: string, ...value: any[]) => void) => void,
         private emitter: ReplayEventEmitter = new ReplayEventEmitter()
         )
         {
+            let actions: Actions = {
+                cancelToken: () => {
+                    throw new Error("Cancelaction token not set");
+                }
+            };
             super((resolve, reject) => executor((result) => {
                 emitter.removeAllListeners()
                 resolve(result);
-            }, (error) => {
+            }, actions.cancelToken = (error) => {
                 emitter.removeAllListeners()
                 reject(error);
             }, emitter.emit.bind(emitter)));
+            this.actions = actions;
+    }
+
+    public cancel(error?: any): this {
+        this.actions.cancelToken();
+        return this;
     }
 
     public on(eventName: string, onData: (...data: any[]) => void): this {
