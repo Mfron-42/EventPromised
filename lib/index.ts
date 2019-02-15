@@ -60,11 +60,12 @@ interface Actions {
 
 export default class EventPromised<T> extends Promise<T> {
     private actions: Actions;
+    private emitter: ReplayEventEmitter;
 
     // @ts-ignore
     constructor(
         executor: (resolve:  (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void, emit: (event: string, ...value: any[]) => void) => void,
-        private emitter: ReplayEventEmitter = new ReplayEventEmitter()
+        emitter: ReplayEventEmitter = new ReplayEventEmitter()
         )
         {
             let actions: Actions = {
@@ -79,6 +80,7 @@ export default class EventPromised<T> extends Promise<T> {
                 emitter.removeAllListeners()
                 reject(error);
             }, emitter.emit.bind(emitter)));
+            this.emitter = emitter;
             this.actions = actions;
     }
 
