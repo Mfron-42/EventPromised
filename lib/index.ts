@@ -73,6 +73,7 @@ export default class EventPromised<T> extends Promise<T> {
                     throw new Error("Cancelaction token not set");
                 }
             };
+            executor = executor == undefined ? (() => undefined) : executor;
             super((resolve, reject) => executor((result) => {
                 emitter.removeAllListeners()
                 resolve(result);
